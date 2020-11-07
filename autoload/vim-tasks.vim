@@ -6,7 +6,7 @@
 " Last Edit:	20201107
 " }}}
 
-function! <SID>#ParseBashCommand(...) " {{{
+function! <SID>ParseBashCommand(...) " {{{
 	let choice = a:1
 	let parent = a:2
 	let cmd_arr = []
@@ -17,7 +17,7 @@ function! <SID>#ParseBashCommand(...) " {{{
 							\ && item["label"] == l
 							\	&& has_key(item, "type")
 							\	&& item["type"] == "bash"
-					let cmd_arr = cmd_arr + <SID>#ParseBashCommand(item, parent)
+					let cmd_arr = cmd_arr + <SID>ParseBashCommand(item, parent)
 				endif
 			endfor
 		endfor
@@ -29,12 +29,12 @@ function! <SID>#ParseBashCommand(...) " {{{
 
 	return cmd_arr
 endfunction " }}}
-function! <SID>#HandleFinalChoice(...) " {{{
+function! <SID>HandleFinalChoice(...) " {{{
 	let choice = a:1
 	let parent_dict = a:2
 
 	if choice["type"] == "bash"
-		let cmd_arr = <SID>#ParseBashCommand(choice, parent_dict)
+		let cmd_arr = <SID>ParseBashCommand(choice, parent_dict)
 		let dlim = ""
 		let command = ""
 		for cmd in cmd_arr
@@ -47,7 +47,7 @@ function! <SID>#HandleFinalChoice(...) " {{{
 		echo "not found"
 	endif
 endfunction " }}}
-function! <SID>#ChoiceFromMap(...) " {{{
+function! <SID>ChoiceFromMap(...) " {{{
 	let ret_val = a:1
 	let task_key_map = {}
 	let translate_map = {}
@@ -113,30 +113,30 @@ function! <SID>#ChoiceFromMap(...) " {{{
 
 		let has_type = has_key(picked, "type")
 		if has_type && picked["type"] != "directory"
-			call <SID>#HandleFinalChoice(picked, ret_val)
+			call <SID>HandleFinalChoice(picked, ret_val)
 			return
 		else
-			call <SID>#ChoiceFromMap(picked["items"], value.":")
+			call <SID>ChoiceFromMap(picked["items"], value.":")
 		endif
 	else
 		return
 	endif
 endfunction " }}}
-function! <SID>#ParseTaskMap(...) " {{{
+function! <SID>ParseTaskMap(...) " {{{
 	let ret_dict = a:1
 	let has_type = has_key(ret_dict, 'type')
 	if has_type
 		let type = ret_dict["type"]
 		if type == "directory"
-			call <SID>#ChoiceFromMap(ret_dict["items"])
+			call <SID>ChoiceFromMap(ret_dict["items"])
 		else
 			return
 		endif
 	else
-		call <SID>#ChoiceFromMap(ret_dict["tasks"], "Run Which:")
+		call <SID>ChoiceFromMap(ret_dict["tasks"], "Run Which:")
 	endif
 endfunction " }}}
-function! <SID>#AggregateTaskMaps(...) " {{{
+function! <SID>AggregateTaskMaps(...) " {{{
 	let def_tasks = a:1
 	let proj_tasks = a:2
 
@@ -163,7 +163,7 @@ function! <SID>#AggregateTaskMaps(...) " {{{
 		return {}
 	endif
 endfunction " }}}
-function! <SID>#VimTasksCustomTasks() " {{{
+function! <SID>VimTasksCustomTasks() " {{{
 	let path = fnamemodify('.', ':p')
 	let file = path.'.tasks.vim.json'
 
@@ -188,12 +188,12 @@ function! <SID>#VimTasksCustomTasks() " {{{
 		let txt = join(proj_file, '')
 		let proj_tasks = ParseJSON(txt)
 		if is_home != 1
-			let g:proj_tasks = <SID>#AggregateTaskMaps(def_tasks, proj_tasks)
+			let g:proj_tasks = <SID>AggregateTaskMaps(def_tasks, proj_tasks)
 		else
 			let g:proj_tasks = proj_tasks
 		endif
 
-		call <SID>#ParseTaskMap(g:proj_tasks, "Run Task:")
+		call <SID>ParseTaskMap(g:proj_tasks, "Run Task:")
 	else
 		let prompt = 'project .tasks.vim.json not found. Create?'
 		let choices = "&Yes\n&No"
