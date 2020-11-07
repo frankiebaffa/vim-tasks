@@ -17,7 +17,7 @@ function! s:ParseBashCommand(...) " {{{
 							\ && item["label"] == l
 							\	&& has_key(item, "type")
 							\	&& item["type"] == "bash"
-					let cmd_arr = cmd_arr + ParseBashCommand(item, parent)
+					let cmd_arr = cmd_arr + s:ParseBashCommand(item, parent)
 				endif
 			endfor
 		endfor
@@ -34,7 +34,7 @@ function! s:HandleFinalChoice(...) " {{{
 	let parent_dict = a:2
 
 	if choice["type"] == "bash"
-		let cmd_arr = ParseBashCommand(choice, parent_dict)
+		let cmd_arr = s:ParseBashCommand(choice, parent_dict)
 		let dlim = ""
 		let command = ""
 		for cmd in cmd_arr
@@ -113,10 +113,10 @@ function! s:ChoiceFromMap(...) " {{{
 
 		let has_type = has_key(picked, "type")
 		if has_type && picked["type"] != "directory"
-			call HandleFinalChoice(picked, ret_val)
+			call s:HandleFinalChoice(picked, ret_val)
 			return
 		else
-			call ChoiceFromMap(picked["items"], value.":")
+			call s:ChoiceFromMap(picked["items"], value.":")
 		endif
 	else
 		return
@@ -128,12 +128,12 @@ function! s:ParseTaskMap(...) " {{{
 	if has_type
 		let type = ret_dict["type"]
 		if type == "directory"
-			call ChoiceFromMap(ret_dict["items"])
+			call s:ChoiceFromMap(ret_dict["items"])
 		else
 			return
 		endif
 	else
-		call ChoiceFromMap(ret_dict["tasks"], "Run Which:")
+		call s:ChoiceFromMap(ret_dict["tasks"], "Run Which:")
 	endif
 endfunction " }}}
 function! s:AggregateTaskMaps(...) " {{{
@@ -188,12 +188,12 @@ function! s:VimTasksCustomTasks() " {{{
 		let txt = join(proj_file, '')
 		let proj_tasks = ParseJSON(txt)
 		if is_home != 1
-			let g:proj_tasks = AggregateTaskMaps(def_tasks, proj_tasks)
+			let g:proj_tasks = s:AggregateTaskMaps(def_tasks, proj_tasks)
 		else
 			let g:proj_tasks = proj_tasks
 		endif
 
-		call ParseTaskMap(g:proj_tasks, "Run Task:")
+		call s:ParseTaskMap(g:proj_tasks, "Run Task:")
 	else
 		let prompt = 'project .tasks.vim.json not found. Create?'
 		let choices = "&Yes\n&No"
