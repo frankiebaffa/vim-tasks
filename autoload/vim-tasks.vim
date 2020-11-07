@@ -163,7 +163,7 @@ function! AggregateTaskMaps(...) " {{{
 		return {}
 	endif
 endfunction " }}}
-function! s:VimTasksCustomTasks() " {{{
+function! <SID>:VimTasksCustomTasks() " {{{
 	let path = fnamemodify('.', ':p')
 	let file = path.'.tasks.vim.json'
 
