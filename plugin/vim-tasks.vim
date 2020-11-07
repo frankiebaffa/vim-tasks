@@ -1,1 +1,1 @@
-command! VimTasksRun call <SID>VimTasksCustomTasks()
+command! VimTasksRun call VimTasksCustomTasks()
