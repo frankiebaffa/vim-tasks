@@ -1,1 +1,1 @@
-command! s:VimTasksRun call s:ProjectTasks()
+command! VimTasksRun call s:VimTasksCustomTasks()
