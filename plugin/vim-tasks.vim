@@ -41,6 +41,7 @@ function! s:HandleFinalChoice(...) " {{{
 			let command = command.dlim.cmd
 			let dlim = " && "
 		endfor
+		exec "!echo \"".command."\""
 
 		exec "!".command
 	else
