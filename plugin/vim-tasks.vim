@@ -58,7 +58,7 @@ function! ChoiceFromMap(...) " {{{
 		let v = ret_val[i]
 		let h = 0
 		for j in split(k, '\zs')
-			let c = j
+			let c = tolower(j)
 			if !has_key(task_key_map, c)
 				let task_key_map[c] = k
 				if h == 0
