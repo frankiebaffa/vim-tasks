@@ -1,0 +1,11 @@
+*vim-tasks.txt* Plugin for running tasks defined in a json file
+
+Author:  Frankie Baffa
+License: Same terms as Vim itself (see |license|)
+
+INTRODUCTION                                    *vim-tasks*
+
+This plugin is a tool for running tasks from a file at project root or a
+user's $HOME.
+
+ vim:tw=78:ts=8:ft=help:norl:
