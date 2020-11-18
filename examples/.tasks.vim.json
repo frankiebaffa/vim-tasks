@@ -1,0 +1,26 @@
+{
+	"tasks": [
+		{
+			"label": "Hello",
+			"type": "bash",
+			"action": "echo 'Hello, World!'"
+		},
+		{
+			"label": "Dir",
+			"type": "directory",
+			"items": [
+				{
+					"label": "Part1",
+					"type": "bash",
+					"action": "echo -n 'Part1...'"
+				},
+				{
+					"label": "Part2",
+					"type": "bash",
+					"action": "echo 'Part2.'",
+					"deps": ["Part1"]
+				}
+			]
+		}
+	]
+}
