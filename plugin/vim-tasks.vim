@@ -36,6 +36,8 @@ function! HandleFinalChoice(...) " {{{
 		endfor
 
 		exec "!".command
+	elseif choice["type"] == "vim"
+		exec choice
 	else
 		echo "not found"
 	endif
