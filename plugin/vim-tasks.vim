@@ -169,22 +169,32 @@ function! RunVimTasks() " {{{
 		let is_home = 1
 	end
 
+	let has_home = 0
 	let def_tasks = {}
 	if is_home != 1
 		if filereadable(homefile)
+			let has_home = 1
 			let f = readfile(homefile)
 			let txt = join(f, '')
 			let def_tasks = ParseJSON(txt)
 		endif
 	endif
 
+	let proj_tasks = {}
+	let has_proj = 0
 	if filereadable(file)
+		let has_proj = 1
 		let proj_file = readfile(file)
 		let txt = join(proj_file, '')
 		let proj_tasks = ParseJSON(txt)
-		if is_home != 1
+	endif
+
+	if has_proj == 1 || has_home == 1
+		if has_home == 1 && has_proj == 1
 			let g:proj_tasks = AggregateTaskMaps(def_tasks, proj_tasks)
-		else
+		elseif has_home == 1
+			let g:proj_tasks = def_tasks
+		elseif has_proj == 1
 			let g:proj_tasks = proj_tasks
 		endif
 
